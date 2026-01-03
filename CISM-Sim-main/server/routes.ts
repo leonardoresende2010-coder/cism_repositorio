@@ -120,12 +120,6 @@ export async function registerRoutes(_httpServer: Server, app: Express) {
         .map((o: any) => `${o.letter}) ${o.text}`)
         .join("\n");
 
-      const ai = getGeminiClient();
-      const model = ai.getGenerativeModel({
-        model: "gemini-1.5-flash",
-        generationConfig: { temperature: 0.1 },
-      });
-
       const prompt = `AJA COMO UM AUDITOR TÉCNICO DE EXAMES.
 Sua tarefa é ler a EXPLICAÇÃO abaixo e identificar qual das ALTERNATIVAS ela defende como correta.
 
@@ -142,9 +136,19 @@ REGRAS:
 3. Responda APENAS com este JSON:
 {"letraIdentificada": "A/B/C/D", "logica": "resumo curto"}`;
 
-      const result = await model.generateContent(prompt);
-      // The SDK returns a response object with .text()
-      const aiText = result.response.text();
+      const ai = getGeminiClient();
+      const result = await ai.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+        config: { temperature: 0.1 },
+      });
+
+      const aiText = result.text ?? "";
 
       const jsonMatch = aiText.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
