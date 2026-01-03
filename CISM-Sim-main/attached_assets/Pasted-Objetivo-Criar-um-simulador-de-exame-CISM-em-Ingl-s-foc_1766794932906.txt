@@ -1,0 +1,25 @@
+Objetivo: Criar um simulador de exame CISM em Inglês, focado em alta performance de estudo, persistência de dados e interface dinâmica.
+1. Interface e Experiência do Usuário (UI/UX):
+•	Layout: Design moderno e minimalista. Painel lateral (sidebar) retrátil contendo a lista de números de questões (1 a N).
+•	Status Visual: No painel lateral, as questões devem mudar de cor: Cinza (não respondida), Verde (correta), Vermelho (errada), e um ícone de "Bandeira" (marcada para revisão).
+•	Animações: Use transições suaves (fade-in/slide) ao trocar de questão. Botões devem ter micro-animações ao clicar. O dashboard de performance deve usar gráficos animados (anéis de progresso).
+•	Modo Tela Cheia: Botão dedicado para ocultar distrações do navegador.
+•	Questoes com acerto devem ser sinalizadas em verde. Questões com erro, em vermelho
+2. Funcionalidades de Estudo:
+•	Feedback Instantâneo: Avaliar cada questão imediatamente após o clique (mostrar justificativa técnica).
+•	Marcação para Revisão: Botão para "Marcar para Revisão", permitindo filtrar essas questões no painel lateral.
+•	Comentários: Campo de texto em cada questão para o usuário inserir anotações pessoais, que devem ser salvas no estado da aplicação.
+•	Limpeza de Dados: Botão "Reset" para apagar todo o progresso e recomeçar do zero.
+•	Botão “refazer” em cada questão.
+•	Área de Upload (Drag & Drop): Implementar zona para arrastar arquivos PDF ou DOCX.
+•	Lógica de Parsing: O app deve processar o texto e identificar padrões de questões (pergunta, opções A-D, resposta correta e explicação).
+
+•	Divisão em Blocos: Organizar as questões automaticamente em grupos de 50 para evitar sobrecarga cognitiva. cada bloco deve especificar sua origem (nome do arquivo de input)
+•	
+
+4. Persistência, Importação e Exportação (JSON/TXT):
+•	Exportação Parcial (Progresso): Gerar arquivo contendo apenas o ID da questão, resposta escolhida, status (certo/errado) e comentários.
+•	Exportação de Erros: Opção de exportar um arquivo PDF ou texto contendo apenas as questões que o usuário errou, para estudo focado.
+•	Importação de Estado: Ao carregar o arquivo de progresso, o app deve remapear todas as respostas e permitir que o usuário continue exatamente da questão onde parou.
+5. Dashboard de Estatísticas:
+•	Visualização em tempo real de: % de Acertos, % de Erros, % de Questões Não Respondidas e Tempo Médio por questão.
