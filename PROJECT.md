@@ -1,39 +1,37 @@
-# Estrutura do Projeto (Cloud Native)
+# CISM Prep Cloud Infrastructure
 
-Este documento descreve a localização e a infraestrutura do projeto após a migração para a nuvem.
+Este documento descreve a infraestrutura de nuvem configurada para o projeto CISM Prep.
 
 ---
 
 ## 🎨 Frontend (Vercel)
 - **Hospedagem:** [Vercel](https://vercel.com)
-- **Localização:** Raiz do projeto e diretório `components/`.
-- **Configuração:** `vercel.json` gerencia o roteamento SPA.
 - **Tecnologias:** React, TypeScript, Vite.
+- **Configuração:** `vercel.json` gerencia o roteamento SPA.
 
 ---
 
-## ⚙️ Backend (Render)
-- **Hospedagem:** [Render](https://render.com)
-- **Localização:** [backend/](file:///c:/Users/cadas/Downloads/Cism/Dumps/exports_json/cism-prep-master-antigravity/backend/)
+## ⚙️ Backend (Railway)
+- **Hospedagem:** [Railway](https://railway.app)
 - **Servidor:** Gunicorn com workers Uvicorn (`gunicorn_conf.py`).
-- **Recursos:** Blueprint disponível em `render.yaml`.
-- **Tecnologias:** Python, FastAPI, SQLAlchemy.
+- **Configuração:** `Procfile` define o comando de inicialização.
+- **Linguagem:** Python 3.10+ (FastAPI).
 
 ---
 
-## 🗄️ Banco de Dados (Neon)
-- **Provedor:** [Neon PostgreSQL](https://neon.tech)
-- **Configuração:** Gerenciado via variável de ambiente `DATABASE_URL` no Render.
-- **Migrações:** Tabelas criadas automaticamente via SQLAlchemy no startup do backend.
-
----
-
-## 📦 Repositório (GitHub)
-- **Hospedagem:** [GitHub](https://github.com)
-- **Sincronização:** Deploy automático habilitado via conexões Render/Vercel -> GitHub.
+## 🐘 Database (Neon)
+- **Hospedagem:** [Neon.tech](https://neon.tech)
+- **Tipo:** PostgreSQL (Serverless).
+- **Conexão:** Gerenciada via variável de ambiente `DATABASE_URL`.
 
 ---
 
 ## 📁 Dados de Exames
-- **Localização:** `backend/data/Testescript/` (dentro do repositório).
-- **Acesso:** O backend utiliza o caminho relativo definido pela variável `EXAMS_BASE_PATH`.
+- **Localização:** `backend/data/Testescript/` (dentro do repositório GitHub).
+- **Acesso:** O backend lê estes arquivos automaticamente ao iniciar.
+
+---
+
+## 🚀 Repositório
+- **GitHub:** [leonardoresende2010-coder/cism_repositorio](https://github.com/leonardoresende2010-coder/cism_repositorio)
+- **Branch Principal:** `main`
