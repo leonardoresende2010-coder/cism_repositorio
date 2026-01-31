@@ -1,0 +1,29 @@
+QUESTÃO 1
+Qual é o principal objetivo do framework COBIT?
+A) Gerenciar riscos de segurança da informação
+B) Fornecer governança e gestão de TI empresarial
+C) Implementar controles de acesso
+D) Auditar sistemas de informação
+
+Resposta: B
+Explicação: O COBIT é um framework abrangente para governança e gestão de TI empresarial, fornecendo práticas, ferramentas e modelos para ajudar as organizações a alcançar seus objetivos de TI.
+
+QUESTÃO 2
+Qual dos seguintes NÃO é um dos três pilares do modelo de segurança da informação (CIA Triad)?
+A) Confidencialidade
+B) Integridade
+C) Autenticidade
+D) Disponibilidade
+
+Resposta: C
+Explicação: A Tríade CIA consiste em Confidencialidade, Integridade e Disponibilidade. Autenticidade é importante, mas não faz parte da tríade clássica.
+
+QUESTÃO 3
+Em um programa de gestão de riscos, qual é a primeira etapa?
+A) Avaliação de riscos
+B) Identificação de riscos
+C) Tratamento de riscos
+D) Monitoramento de riscos
+
+Resposta: B
+Explicação: A identificação de riscos é a primeira etapa. Você precisa primeiro identificar quais riscos existem antes de poder avaliá-los, tratá-los ou monitorá-los.

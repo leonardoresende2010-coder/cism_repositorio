@@ -1,0 +1,262 @@
+Questoes CISM
+
+QUESTÃO 1 Qual é o principal objetivo da governança de segurança da informação?
+A) Garantir que os controles de segurança sejam tecnicamente eficazes. B) Alinhar a estratégia de segurança com os objetivos de negócio. C) Minimizar o custo de aquisição de novas tecnologias de segurança. D) Cumprir rigorosamente todas as leis e regulamentações locais.
+Resposta: B
+Explicação: A governança visa assegurar que a estratégia de segurança apoie os objetivos da organização e que os riscos sejam geridos adequadamente dentro de uma estrutura de prestação de contas.
+
+QUESTÃO 2 Ao realizar uma análise de impacto nos negócios (BIA), qual é o fator mais importante a ser determinado?
+A) O custo de substituir o hardware danificado. B) A probabilidade de ocorrência de uma ameaça natural. C) O tempo de recuperação aceitável (RTO) para processos críticos. D) A lista de contatos da equipe de resposta a incidentes.
+Resposta: C
+Explicação: A BIA foca em identificar a criticidade dos processos e o impacto da interrupção, sendo o RTO e o RPO métricas essenciais para o planejamento da continuidade.
+
+QUESTÃO 3 Qual das seguintes opções melhor descreve o "Risco Residual"?
+A) O risco que permanece após a implementação de controles. B) O risco total antes de qualquer ação de mitigação ser tomada. C) A probabilidade de que um controle venha a falhar. D) O impacto financeiro máximo de uma ameaça específica.
+Resposta: A
+Explicação: O risco residual é a porção de risco que permanece mesmo após a aplicação de medidas de segurança para mitigá-lo.
+
+QUESTÃO 4 O principal benefício de envolver a alta gestão no desenvolvimento de políticas de segurança é:
+A) Permitir que os gestores escolham as ferramentas de firewall. B) Demonstrar o comprometimento da liderança com a segurança. C) Garantir que a segurança tenha o maior orçamento da empresa. D) Reduzir a responsabilidade legal dos administradores do sistema.
+Resposta: B
+Explicação: O apoio da liderança ("Tone at the Top") é fundamental para garantir que as políticas sejam levadas a sério e integradas à cultura organizacional.
+
+QUESTÃO 5 Qual é a primeira etapa na criação de um plano de resposta a incidentes?
+A) Comprar ferramentas de monitoramento de rede. B) Isolar os sistemas infectados imediatamente. C) Obter a aprovação e o apoio da alta gerência. D) Treinar todos os funcionários em segurança básica.
+Resposta: C
+Explicação: Sem o mandato e o apoio da alta gerência, o plano carecerá de autoridade, recursos e cooperação entre os diferentes departamentos da empresa.
+
+QUESTÃO 6 Uma organização decidiu transferir o risco de um vazamento de dados contratando um seguro cibernético. Isso é um exemplo de:
+A) Mitigação de risco. B) Evitação de risco. C) Compartilhamento ou Transferência de risco. D) Aceitação de risco.
+Resposta: C
+Explicação: A transferência de risco envolve repassar o impacto financeiro de uma perda potencial para um terceiro, como uma seguradora.
+
+QUESTÃO 7 Qual métrica é mais útil para medir a eficácia de um programa de conscientização em segurança?
+A) O número de firewalls instalados no último ano. B) A redução no número de incidentes causados por erro humano. C) A quantidade de horas que os funcionários passaram em treinamento. D) O custo total das ferramentas de antivírus.
+Resposta: B
+Explicação: A eficácia é medida pelo resultado (redução de incidentes/mudança de comportamento) e não apenas pelo esforço (horas de treinamento).
+
+QUESTÃO 8 Qual é a principal responsabilidade do proprietário dos dados (Data Owner)?
+A) Executar backups diários dos bancos de dados. B) Definir o nível de classificação e os direitos de acesso aos dados. C) Garantir a disponibilidade física dos servidores. D) Monitorar o tráfego de rede em busca de intrusões.
+Resposta: B
+Explicação: O proprietário dos dados tem a autoridade sobre a informação e deve decidir como ela deve ser classificada e quem pode acessá-la.
+
+QUESTÃO 9 Durante a fase de contenção de um incidente, a prioridade máxima deve ser:
+A) Identificar o invasor para processá-lo legalmente. B) Restaurar todos os serviços a partir do último backup. C) Impedir que o incidente se espalhe para outros sistemas. D) Notificar a imprensa sobre o ocorrido.
+Resposta: C
+Explicação: A contenção foca em limitar o escopo do dano e impedir que o problema se agrave ou contamine o restante da rede.
+
+QUESTÃO 10 Um Gerente de Segurança da Informação (ISM) descobre que um controle chave foi ignorado para acelerar um processo de negócio. O ISM deve:
+A) Ignorar o fato, já que o negócio é a prioridade. B) Bloquear o processo de negócio imediatamente sem aviso. C) Avaliar o risco e reportar as descobertas à gerência sênior. D) Pedir demissão por violação de ética da empresa.
+Resposta: C
+Explicação: O ISM deve atuar como consultor de riscos, informando a liderança sobre as consequências da decisão para que eles possam decidir se aceitam ou mitigam o risco.
+
+QUESTÃO 11 Qual é a principal finalidade de um Business Case para um novo projeto de segurança da informação?
+A) Definir as especificações técnicas detalhadas dos firewalls. B) Justificar o investimento com base no valor entregue e alinhamento com o negócio. C) Listar todos os usuários que terão acesso administrativo. D) Criar um cronograma detalhado de tarefas para a implementação.
+Resposta: B
+Explicação: O Business Case é um documento de suporte à decisão que demonstra por que o projeto deve ser financiado, focando em ROI e redução de riscos.
+
+QUESTÃO 12 Ao terceirizar o processamento de dados para um provedor de nuvem, quem detém a responsabilidade final pela proteção desses dados?
+A) O provedor de serviços de nuvem (CSP). B) O gerente de TI do provedor de nuvem. C) A organização que contratou o serviço (cliente). D) O órgão regulador governamental do setor.
+Resposta: C
+Explicação: Embora o provedor gerencie a segurança da infraestrutura, o cliente permanece como o responsável final (accountable) pelos dados e pela conformidade.
+
+QUESTÃO 13 Qual é a função de um indicador chave de risco (KRI)?
+A) Medir o desempenho passado da equipe de segurança. B) Prever a probabilidade de um evento de risco futuro. C) Documentar o inventário de todos os riscos identificados. D) Garantir que todos os funcionários leiam a política de segurança.
+Resposta: B
+Explicação: KRIs são métricas prospectivas que servem como alertas antecipados de que a exposição ao risco está mudando ou aumentando.
+
+QUESTÃO 14 Qual é o principal critério para classificar um ativo de informação?
+A) O custo de aquisição do software e hardware. B) A dificuldade técnica para implementar controles de acesso. C) O impacto potencial ao negócio caso o ativo seja comprometido. D) O tempo necessário para realizar o backup completo.
+Resposta: C
+Explicação: A classificação é baseada no valor da informação para o negócio e no dano causado por falhas em sua confidencialidade, integridade ou disponibilidade.
+
+QUESTÃO 15 O que melhor define a "Linha de Base de Segurança" (Security Baseline)?
+A) O nível máximo de segurança que uma empresa pode atingir. B) O conjunto mínimo de controles de segurança exigidos para um sistema. C) A pontuação obtida em um teste de invasão anual. D) O orçamento mínimo aprovado para o departamento de segurança.
+Resposta: B
+Explicação: Linhas de base são padrões mínimos obrigatórios que garantem um nível consistente de proteção em toda a infraestrutura tecnológica.
+
+QUESTÃO 16 Qual componente é essencial para garantir que a gestão de riscos seja eficaz e contínua?
+A) A renovação anual de todas as senhas de administradores. B) A realização de avaliações de risco em intervalos regulares e após mudanças. C) O uso exclusivo de ferramentas de análise de risco automatizadas. D) A delegação da responsabilidade de risco apenas para o setor de TI.
+Resposta: B
+Explicação: A gestão de riscos deve ser um processo cíclico para se adaptar a novas ameaças e mudanças no ambiente de negócios.
+
+QUESTÃO 17 Qual é a principal vantagem da análise de risco quantitativa em comparação com a qualitativa?
+A) É mais rápida e fácil de ser executada por pessoal não técnico. B) Não requer dados históricos ou estatísticas precisas. C) Fornece resultados em termos monetários, facilitando a análise de custo-benefício. D) Baseia-se inteiramente no julgamento subjetivo de especialistas.
+Resposta: C
+Explicação: A análise quantitativa permite traduzir riscos em valores financeiros, o que ajuda na comunicação com a diretoria financeira e executiva.
+
+QUESTÃO 18 Qual é o objetivo primordial de um Plano de Continuidade de Negócios (BCP)?
+A) Reduzir o custo dos prêmios de seguro cibernético. B) Punir os responsáveis por falhas operacionais graves. C) Manter as operações críticas durante e após uma interrupção. D) Garantir que o departamento de TI recupere todos os e-mails.
+Resposta: C
+Explicação: O BCP foca na resiliência da organização, assegurando que os processos vitais continuem funcionando mesmo diante de desastres.
+
+QUESTÃO 19 Durante uma auditoria, descobre-se que uma unidade de negócio está utilizando um software não autorizado. Qual deve ser a primeira ação do CISM?
+A) Desativar o software e os servidores envolvidos imediatamente. B) Notificar o departamento jurídico para iniciar ações disciplinares. C) Avaliar o risco que o software representa para a organização. D) Comprar licenças para tornar o software legal e autorizado.
+Resposta: C
+Explicação: Antes de qualquer ação corretiva, deve-se entender o risco e o impacto de negócio envolvidos para recomendar a melhor solução.
+
+QUESTÃO 20 Qual é a função de um indicador chave de desempenho (KPI) no programa de segurança?
+A) Prever novos ataques de hackers. B) Medir o progresso em relação aos objetivos de segurança estabelecidos. C) Substituir a necessidade de auditorias internas. D) Avaliar o nível de ameaça externa em tempo real.
+Resposta: B
+Explicação: KPIs são usados para medir a eficácia dos processos e o progresso em direção às metas estratégicas de segurança.
+
+QUESTÃO 21 Qual é o principal benefício de um programa de gerenciamento de vulnerabilidades baseado em risco?
+A) Corrigir todas as vulnerabilidades identificadas nos relatórios de varredura.
+B) Focar os recursos limitados na correção de falhas que representam a maior ameaça ao negócio.
+C) Atender aos requisitos de conformidade para auditorias anuais.
+D) Automatizar a instalação de patches em todos os servidores da empresa.
+Resposta: B
+Explicação: Nem todas as vulnerabilidades têm o mesmo impacto. Um programa baseado em risco prioriza aquelas que afetam ativos críticos e que possuem maior probabilidade de exploração, otimizando o uso de recursos.
+
+QUESTÃO 22 Qual técnica é mais eficaz para detectar ataques de "Zero Day" em uma rede corporativa?
+A) Assinaturas de antivírus atualizadas diariamente.
+B) Firewalls de inspeção de estado (Stateful Inspection).
+C) Análise de comportamento baseada em anomalias.
+D) Bloqueio de portas de protocolos comuns, como HTTP e FTP.
+Resposta: C
+Explicação: Como ataques de Zero Day não possuem assinaturas conhecidas, a detecção de anomalias (identificar comportamentos que fogem do padrão normal da rede) é a técnica mais eficaz para identificá-los.
+
+QUESTÃO 23 Qual é a função de um Acordo de Nível de Serviço (SLA) em um contrato com um provedor de nuvem?
+A) Definir as responsabilidades técnicas de configuração do firewall.
+B) Estabelecer métricas mensuráveis de desempenho e disponibilidade do serviço.
+C) Isentar o cliente de qualquer responsabilidade legal em caso de vazamento.
+D) Fornecer uma lista de todos os funcionários que trabalham no provedor.
+Resposta: B
+Explicação: O SLA define as expectativas de nível de serviço (como 99,9% de disponibilidade) e as penalidades caso o provedor não cumpra esses requisitos.
+
+QUESTÃO 24 Um CISM descobriu que o tempo de recuperação real de um sistema crítico excede o RTO definido. O que ele deve fazer primeiro?
+A) Alterar o RTO na política para coincidir com o tempo real.
+B) Comprar novos servidores para acelerar o processo de restauração.
+C) Relatar a lacuna (gap) de conformidade à alta gestão.
+D) Ignorar a diferença se nenhum incidente tiver ocorrido recentemente.
+Resposta: C
+Explicação: Quando a capacidade de recuperação não atende aos requisitos do negócio, a gerência sênior deve ser informada para decidir se investe em melhorias ou se aceita o novo nível de risco.
+
+QUESTÃO 25 Qual é a principal vantagem de utilizar uma estrutura (framework) de segurança como NIST ou ISO 27001?
+A) Garantir que a empresa nunca sofra um ataque cibernético.
+B) Fornecer uma abordagem padronizada e abrangente para a gestão de segurança.
+C) Eliminar a necessidade de realizar avaliações de risco internas.
+D) Reduzir o custo de licenciamento de softwares de segurança.
+Resposta: B
+Explicação: Frameworks fornecem um roteiro testado e aceito pelo mercado, garantindo que nenhum domínio crítico de segurança seja esquecido e facilitando a comunicação com parceiros e auditores.
+
+QUESTÃO 26 Em uma análise de custo-benefício para um controle de segurança, o controle deve ser implementado se:
+A) O custo do controle for igual ao valor do ativo protegido.
+B) O custo do controle for menor que a redução esperada na perda (ALE).
+C) O controle for a tecnologia mais moderna disponível no mercado.
+D) O departamento de TI tiver orçamento sobrando no final do ano.
+Resposta: B
+Explicação: Economicamente, um controle só faz sentido se o investimento nele for menor do que o prejuízo que ele evita ao longo do tempo.
+
+QUESTÃO 27 Qual é o papel da criptografia em repouso (at rest) em um banco de dados de RH?
+A) Impedir que administradores de banco de dados vejam os dados.
+B) Garantir a integridade dos dados contra alterações acidentais.
+C) Proteger a confidencialidade dos dados em caso de roubo físico dos discos.
+D) Aumentar a velocidade de consulta às informações dos funcionários.
+Resposta: C
+Explicação: A criptografia em repouso foca em proteger os dados armazenados contra acesso não autorizado se o meio físico (disco, fita, servidor) for comprometido.
+
+QUESTÃO 28 Qual é o principal desafio na implementação de uma política de Bring Your Own Device (BYOD)?
+A) O custo de comprar dispositivos para todos os funcionários.
+B) A dificuldade em manter o controle e a segurança sobre ativos que não pertencem à empresa.
+C) A falta de aplicativos de produtividade para dispositivos móveis.
+D) A resistência dos funcionários em usar seus próprios telefones para o trabalho.
+Resposta: B
+Explicação: No BYOD, o desafio é equilibrar a privacidade do funcionário com a necessidade da empresa de proteger dados corporativos em um hardware que ela não gerencia diretamente.
+
+QUESTÃO 29 O que caracteriza a técnica de "Defesa em Profundidade" (Defense in Depth)?
+A) O uso de um único firewall extremamente potente e caro.
+B) A implementação de múltiplas camadas de controles de segurança independentes.
+C) A dependência total de criptografia para todos os arquivos da empresa.
+D) O isolamento físico de todos os servidores em uma sala blindada.
+Resposta: B
+Explicação: A ideia é que, se um controle falhar (ex: firewall), outro controle (ex: IDS ou controle de acesso) ainda proteja o ativo, evitando um ponto único de falha.
+
+QUESTÃO 30 Qual é a primeira ação após a erradicação de um incidente de segurança?
+A) Notificar os clientes sobre a falha de segurança.
+B) Realizar uma reunião de "Lições Aprendidas".
+C) Restaurar os sistemas e dados para a operação normal.
+D) Formatar todos os computadores da empresa preventivamente.
+Resposta: C
+Explicação: Após a erradicação (remover a causa raiz/ameaça), a fase seguinte é a Recuperação, onde os sistemas são validados e devolvidos ao estado operacional.
+
+QUESTÃO 31 Ao avaliar a segurança de um fornecedor terceirizado, qual documento oferece o maior nível de garantia independente?
+A) Uma autoavaliação preenchida pelo próprio fornecedor.
+B) Um relatório de auditoria SOC 2 Tipo II.
+C) Uma cópia da política de segurança interna do fornecedor.
+D) Uma declaração assinada pelo CEO do fornecedor garantindo a segurança.
+Resposta: B
+Explicação: O relatório SOC 2 Tipo II é realizado por auditores externos independentes e atesta a eficácia operacional dos controles ao longo de um período de tempo.
+
+QUESTÃO 32 Qual é a principal diferença entre um plano de Resposta a Incidentes (IRP) e um Plano de Recuperação de Desastres (DRP)?
+A) O IRP foca em ataques de hackers e o DRP foca em desastres naturais.
+B) O IRP foca no gerenciamento de eventos de segurança; o DRP foca na restauração da infraestrutura tecnológica.
+C) O IRP é responsabilidade da segurança; o DRP é responsabilidade exclusiva do RH.
+D) Não há diferença; os dois termos são sinônimos na metodologia ISACA.
+Resposta: B
+Explicação: Enquanto o IRP trata de conter e remediar um evento de segurança, o DRP é um subconjunto da continuidade de negócios focado em reconstruir a capacidade tecnológica após uma falha catastrófica.
+
+QUESTÃO 33 Qual é o objetivo de um teste de "Caixa Preta" (Black Box) em um sistema?
+A) Testar o sistema com total conhecimento do código-fonte e arquitetura.
+B) Simular um ataque externo onde o testador não tem conhecimento prévio da infraestrutura.
+C) Verificar apenas a segurança física do data center onde o sistema reside.
+D) Analisar a eficiência do backup sem precisar restaurar os dados.
+Resposta: B
+Explicação: O teste Black Box simula a perspectiva de um atacante externo real, sem acesso a informações privilegiadas sobre o funcionamento interno do alvo.
+
+QUESTÃO 34 Qual métrica é mais relevante para a alta gestão ao avaliar o programa de segurança?
+A) O número de tentativas de login falhas bloqueadas pelo firewall.
+B) O tempo médio entre falhas (MTBF) dos servidores de arquivo.
+C) O nível de risco residual em comparação com o apetite a risco da organização.
+D) A quantidade de vírus detectados pelo software de endpoint.
+Resposta: C
+Explicação: A alta gestão está preocupada com o risco ao negócio. Saber se o risco residual está dentro do que a empresa aceita é a informação mais estratégica.
+
+QUESTÃO 35 Qual é o principal risco de não realizar o descarte seguro de mídia (discos rígidos, fitas)?
+A) O custo de armazenamento de mídias antigas em depósitos.
+B) A possibilidade de recuperação de dados sensíveis por pessoas não autorizadas.
+C) A perda da garantia do fabricante do hardware.
+D) O impacto ambiental do descarte de resíduos eletrônicos.
+Resposta: B
+Explicação: Dados que não são destruídos fisicamente ou higienizados adequadamente podem ser recuperados por terceiros, levando a vazamentos de informações críticas.
+
+QUESTÃO 36 O que define a "Segregação de Funções" (SoD) na administração de sistemas?
+A) Garantir que cada funcionário tenha seu próprio computador pessoal.
+B) Dividir tarefas críticas entre pessoas diferentes para evitar fraudes ou erros não detectados.
+C) Ter equipes de suporte em diferentes fusos horários para cobertura 24/7.
+D) Proibir que desenvolvedores usem a internet durante o horário de trabalho.
+Resposta: B
+Explicação: A SoD garante que nenhuma pessoa sozinha tenha controle total sobre uma transação crítica do início ao fim, reduzindo o risco de abuso de privilégios.
+
+QUESTÃO 37 Qual é o papel principal de um Comitê de Segurança da Informação (Steering Committee)?
+A) Escrever o código-fonte das ferramentas de segurança.
+B) Tomar decisões estratégicas, priorizar projetos e aprovar orçamentos de segurança.
+C) Realizar investigações forenses em dispositivos móveis de funcionários.
+D) Instalar patches de segurança nos servidores de produção.
+Resposta: B
+Explicação: O comitê de direção garante que a segurança tenha representação de diversas áreas do negócio e que os investimentos estejam alinhados às prioridades da empresa.
+
+QUESTÃO 38 Qual é o risco de permitir o acesso "Shadow IT" (TI invisível) em uma organização?
+A) A redução da produtividade dos funcionários que usam ferramentas novas.
+B) A exposição de dados corporativos em sistemas que não seguem as políticas de segurança da empresa.
+C) O aumento do tempo de resposta do suporte técnico oficial.
+D) A falta de variedade de softwares disponíveis para os usuários.
+Resposta: B
+Explicação: O Shadow IT ocorre quando departamentos usam serviços (especialmente nuvem) sem conhecimento da TI/Segurança, criando silos de dados desprotegidos e sem conformidade.
+
+QUESTÃO 39 Em um cenário de incidente confirmado, qual é a primeira prioridade?
+A) Preservar as evidências para uma futura ação judicial.
+B) Manter a continuidade das operações de negócio críticas.
+C) Informar os acionistas sobre o impacto financeiro.
+D) Desligar toda a conexão de internet da empresa.
+Resposta: B
+Explicação: Embora a preservação de evidências seja importante, a prioridade máxima em gestão de incidentes é sempre a segurança das pessoas e a continuidade das operações vitais da organização.
+
+QUESTÃO 40 Qual é a melhor forma de garantir que os requisitos de segurança sejam incluídos em novos sistemas?
+A) Realizar um teste de invasão no dia anterior ao lançamento.
+B) Integrar a segurança ao Ciclo de Vida de Desenvolvimento de Sistemas (SDLC).
+C) Comprar um seguro cibernético para cobrir falhas de software.
+D) Treinar os usuários finais para detectarem falhas de lógica no sistema.
+Resposta: B
+Explicação: Incluir segurança desde o planejamento e design (Security by Design) é mais barato e eficaz do que tentar "consertar" o sistema depois que ele já foi construído.
+
