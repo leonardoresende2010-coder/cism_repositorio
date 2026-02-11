@@ -34,7 +34,7 @@ O código local foi sincronizado com o GitHub após resolver conflitos de histó
 1. Importe o repositório do GitHub.
 2. Adicione as Variáveis de Ambiente essenciais:
    - `DATABASE_URL`: Conexão Neon.
-   - `GEMINI_API_KEY`: Para inteligência artificial.
+   - `OPENROUTER_API_KEY`: Para inteligência artificial (OpenRouter, modelos gratuitos).
    - `CORS_ORIGINS`: URL do Vercel (ex: `https://site.vercel.app`).
    - `FRONTEND_URL`: Mesma URL do Vercel.
    - `USE_SQLITE`: `false` (obrigatório para usar Neon).
@@ -75,13 +75,15 @@ Durante a migração, resolvemos os seguintes pontos críticos. Esta seção ser
 
 **Vercel:**
 - `VITE_API_URL`: URL_DO_RAILWAY
-- `VITE_GOOGLE_CLIENT_ID`: `211619745414-1l0o7rh9raagsqdim0isenrob29rbanv.apps.googleusercontent.com`
+- `VITE_GOOGLE_CLIENT_ID`: (configurar no painel do Vercel)
 
 **Railway:**
-- `DATABASE_URL`: `postgresql://neondb_owner:npg_XIQJhO4Eto3i@ep-steep-sea-ahz0h3e1.us-east-1.aws.neon.tech/neondb?sslmode=require`
-- `GEMINI_API_KEY`: `AIzaSyDZ3ZqIzjCGJv02GrEL0qyqiPTeBBz70nU`
+- `DATABASE_URL`: (string de conexão do Neon - configurar no painel do Railway)
+- `OPENROUTER_API_KEY`: (chave da API OpenRouter - configurar no painel do Railway)
 - `CORS_ORIGINS`: URL_DO_VERCEL (ou `*` para testes)
 - `USE_SQLITE`: `false`
+
+> ⚠️ **IMPORTANTE:** Nunca commitar secrets/chaves no repositório. Configure sempre via variáveis de ambiente nos painéis do Railway e Vercel.
 
 ---
 

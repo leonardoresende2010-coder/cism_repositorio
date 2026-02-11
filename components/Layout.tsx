@@ -83,7 +83,7 @@ export const Layout: React.FC<LayoutProps> = ({ currentView, onChangeView, onLog
             </button>
 
             <div className="bg-slate-800 rounded-lg p-3 text-xs text-slate-400">
-              <p className="hidden lg:block">Powered by Google Gemini</p>
+              <p className="hidden lg:block">Powered by OpenRouter AI</p>
               <p className="lg:hidden text-center">AI</p>
             </div>
           </div>
