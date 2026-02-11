@@ -1,10 +1,18 @@
 import os
+import json
 import requests
 from .schemas import Question
 
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-# Free model from OpenRouter - high quality and free
-FREE_MODEL = "deepseek/deepseek-chat-v3-0324:free"
+
+# Free models from OpenRouter - ordered by preference (fallback list)
+FREE_MODELS = [
+    "meta-llama/llama-4-maverick:free",
+    "deepseek/deepseek-chat-v3-0324:free",
+    "google/gemini-2.5-pro-exp-03-25:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "mistralai/mistral-small-3.1-24b-instruct:free",
+]
 
 def get_api_key():
     api_key = os.getenv("OPENROUTER_API_KEY")
@@ -13,7 +21,7 @@ def get_api_key():
     return api_key
 
 def call_openrouter(messages: list, max_tokens: int = 2048) -> str:
-    """Makes a request to the OpenRouter API using a free model."""
+    """Makes a request to the OpenRouter API using free models with fallback."""
     api_key = get_api_key()
     if not api_key:
         return None
@@ -25,18 +33,61 @@ def call_openrouter(messages: list, max_tokens: int = 2048) -> str:
         "X-Title": "PrepWise CISM"
     }
 
-    payload = {
-        "model": FREE_MODEL,
-        "messages": messages,
-        "max_tokens": max_tokens,
-        "temperature": 0.7
-    }
+    last_error = None
+    for model in FREE_MODELS:
+        payload = {
+            "model": model,
+            "messages": messages,
+            "max_tokens": max_tokens,
+            "temperature": 0.7
+        }
 
-    response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload, timeout=60)
-    response.raise_for_status()
+        try:
+            print(f"[OpenRouter] Trying model: {model}")
+            response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload, timeout=60)
 
-    data = response.json()
-    return data["choices"][0]["message"]["content"]
+            # Log response for debugging
+            print(f"[OpenRouter] Status: {response.status_code}")
+            if response.status_code != 200:
+                print(f"[OpenRouter] Response body: {response.text[:500]}")
+                response.raise_for_status()
+
+            data = response.json()
+
+            # Check for OpenRouter-specific error in response body
+            if "error" in data:
+                error_info = data["error"]
+                error_msg = error_info.get("message", str(error_info))
+                print(f"[OpenRouter] API returned error for {model}: {error_msg}")
+                last_error = error_msg
+                continue  # Try next model
+
+            content = data["choices"][0]["message"]["content"]
+            print(f"[OpenRouter] Success with model: {model}")
+            return content
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code if e.response is not None else 0
+            print(f"[OpenRouter] HTTPError {status_code} for {model}: {e}")
+            last_error = f"{status_code}: {str(e)}"
+            if status_code in (401, 402):
+                # Auth/payment errors won't be fixed by trying another model
+                raise
+            continue  # Try next model
+
+        except requests.exceptions.Timeout:
+            print(f"[OpenRouter] Timeout for {model}")
+            last_error = "Timeout"
+            continue  # Try next model
+
+        except Exception as e:
+            print(f"[OpenRouter] Unexpected error for {model}: {e}")
+            last_error = str(e)
+            continue  # Try next model
+
+    # All models failed
+    raise Exception(f"Todos os modelos falharam. Último erro: {last_error}")
+
 
 def analyze_question(question: Question) -> str:
     if not get_api_key():
@@ -65,8 +116,8 @@ Provide a concise analysis focusing on the ISACA mindset."""
             return "Erro: OPENROUTER_API_KEY não configurada."
         return result
     except requests.exceptions.HTTPError as e:
+        status_code = e.response.status_code if e.response is not None else 0
         error_msg = str(e)
-        status_code = e.response.status_code if e.response else 0
         print(f"OpenRouter API Error ({status_code}): {error_msg}")
         if status_code == 401:
             return "Erro: A chave API configurada é inválida."
@@ -74,7 +125,7 @@ Provide a concise analysis focusing on the ISACA mindset."""
             return "Erro: Limite de requisições excedido. Tente novamente em alguns segundos."
         if status_code == 402:
             return "Erro: Créditos insuficientes na API."
-        return f"IA Temporariamente indisponível: {status_code} {error_msg}"
+        return f"IA Temporariamente indisponível: {error_msg}"
     except requests.exceptions.Timeout:
         return "Erro: A requisição para a IA expirou. Tente novamente."
     except Exception as e:
