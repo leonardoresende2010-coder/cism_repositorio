@@ -7,7 +7,7 @@ from .schemas import Question
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Single reliable free model
-FREE_MODEL = "meta-llama/llama-4-maverick:free"
+FREE_MODEL = "google/gemma-3-27b-it:free"
 
 def get_api_key():
     api_key = os.getenv("OPENROUTER_API_KEY")

@@ -674,7 +674,7 @@ def ai_debug():
     }
     
     payload = {
-        "model": "meta-llama/llama-4-maverick:free",
+        "model": "google/gemma-3-27b-it:free",
         "messages": [
             {"role": "user", "content": "Say hello in one word."}
         ],
