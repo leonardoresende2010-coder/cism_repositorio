@@ -488,6 +488,51 @@ def delete_quiz(quiz_id: str, db: Session = Depends(get_db), current_user: model
     db.commit()
     return {"ok": True}
 
+@app.patch("/quizzes/{quiz_id}/move")
+def move_quiz_to_workplace(quiz_id: str, workplace_id: str, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Move a quiz to a different workplace (or make it standalone with workplace_id=none)."""
+    quiz = db.query(models.Quiz).filter(models.Quiz.id == quiz_id, models.Quiz.user_id == current_user.id).first()
+    if not quiz:
+        raise HTTPException(status_code=404, detail="Quiz not found")
+    
+    if workplace_id and workplace_id != "none":
+        wp = db.query(models.Workplace).filter(models.Workplace.id == workplace_id, models.Workplace.user_id == current_user.id).first()
+        if not wp:
+            raise HTTPException(status_code=404, detail="Workplace not found")
+        quiz.workplace_id = workplace_id
+    else:
+        quiz.workplace_id = None
+    
+    db.commit()
+    db.refresh(quiz)
+    return {"ok": True, "quiz_id": quiz_id, "workplace_id": quiz.workplace_id}
+
+@app.post("/quizzes/{target_quiz_id}/merge/{source_quiz_id}")
+def merge_quizzes(target_quiz_id: str, source_quiz_id: str, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    """Merge all questions from source quiz into target quiz, then delete source."""
+    target = db.query(models.Quiz).filter(models.Quiz.id == target_quiz_id, models.Quiz.user_id == current_user.id).first()
+    if not target:
+        raise HTTPException(status_code=404, detail="Target quiz not found")
+    
+    source = db.query(models.Quiz).filter(models.Quiz.id == source_quiz_id, models.Quiz.user_id == current_user.id).first()
+    if not source:
+        raise HTTPException(status_code=404, detail="Source quiz not found")
+    
+    if target_quiz_id == source_quiz_id:
+        raise HTTPException(status_code=400, detail="Cannot merge a quiz with itself")
+    
+    # Move all questions from source to target
+    source_questions = db.query(models.Question).filter(models.Question.quiz_id == source_quiz_id).all()
+    for q in source_questions:
+        q.quiz_id = target_quiz_id
+    
+    # Delete the now-empty source quiz
+    db.delete(source)
+    db.commit()
+    db.refresh(target)
+    
+    return {"ok": True, "target_quiz_id": target_quiz_id, "questions_moved": len(source_questions)}
+
 @app.post("/progress/", response_model=schemas.UserProgress)
 def update_progress(progress: schemas.UserProgressUpdate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     db_progress = db.query(models.UserProgress).filter(

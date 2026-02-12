@@ -287,6 +287,41 @@ function App() {
         }
     };
 
+    const handleMoveQuizToWorkplace = async (quizId: string, workplaceId: string) => {
+        setIsLoading(true);
+        try {
+            await api.moveQuizToWorkplace(quizId, workplaceId);
+            await loadData();
+        } catch (err: any) {
+            alert("Erro ao mover bloco: " + err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleMergeQuizzes = async (targetQuizId: string, sourceQuizId: string) => {
+        // Find source quiz name for the confirmation
+        const sourceQuiz = quizzes.find(q => q.id === sourceQuizId) ||
+            workplaces.flatMap(wp => wp.quizzes).find(q => q.id === sourceQuizId);
+        const targetQuiz = quizzes.find(q => q.id === targetQuizId) ||
+            workplaces.flatMap(wp => wp.quizzes).find(q => q.id === targetQuizId);
+
+        const confirmed = window.confirm(
+            `Mesclar "${sourceQuiz?.title || 'bloco'}" (${sourceQuiz?.questions.length || 0} questões) dentro de "${targetQuiz?.title || 'bloco'}"?\n\nAs questões serão combinadas e o bloco de origem será removido.`
+        );
+        if (!confirmed) return;
+
+        setIsLoading(true);
+        try {
+            await api.mergeQuizzes(targetQuizId, sourceQuizId);
+            await loadData();
+        } catch (err: any) {
+            alert("Erro ao mesclar blocos: " + err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const processContent = async (filename: string, content: string, provider?: string) => {
         console.log("processContent started for:", filename);
 
@@ -805,7 +840,26 @@ function App() {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50/50 rounded-[3rem] p-10 border border-slate-200/60 shadow-inner grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative overflow-hidden">
+                            <div
+                                className="bg-slate-50/50 rounded-[3rem] p-10 border border-slate-200/60 shadow-inner grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative overflow-hidden transition-all duration-300"
+                                onDragOver={(e) => {
+                                    if (e.dataTransfer.types.includes('application/quiz-id')) {
+                                        e.preventDefault();
+                                        e.currentTarget.classList.add('ring-4', 'ring-indigo-400/30', 'border-indigo-300', 'bg-indigo-50/50');
+                                    }
+                                }}
+                                onDragLeave={(e) => {
+                                    e.currentTarget.classList.remove('ring-4', 'ring-indigo-400/30', 'border-indigo-300', 'bg-indigo-50/50');
+                                }}
+                                onDrop={(e) => {
+                                    e.preventDefault();
+                                    e.currentTarget.classList.remove('ring-4', 'ring-indigo-400/30', 'border-indigo-300', 'bg-indigo-50/50');
+                                    const sourceQuizId = e.dataTransfer.getData('application/quiz-id');
+                                    if (sourceQuizId) {
+                                        handleMoveQuizToWorkplace(sourceQuizId, wp.id);
+                                    }
+                                }}
+                            >
                                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/5 rounded-full -mr-48 -mt-48 blur-[120px] pointer-events-none"></div>
 
                                 {wp.quizzes.length === 0 ? (
@@ -814,7 +868,7 @@ function App() {
                                             <svg className="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                                         </div>
                                         <p className="text-slate-500 font-bold text-xl uppercase tracking-widest">Workplace pronto</p>
-                                        <p className="text-slate-400 mt-2 max-w-sm text-lg font-medium">Clique em "Novo Bloco de Questão" para começar a povoar este espaço.</p>
+                                        <p className="text-slate-400 mt-2 max-w-sm text-lg font-medium">Clique em "Novo Bloco de Questão" ou arraste um bloco desorganizado para cá.</p>
                                     </div>
                                 ) : (
                                     wp.quizzes.map(quiz => (
@@ -827,6 +881,7 @@ function App() {
                                             onReset={handleResetQuizBlock}
                                             onDelete={handleDeleteQuizBlock}
                                             onDrop={handleDropOnQuiz}
+                                            onQuizDrop={handleMergeQuizzes}
                                         />
                                     ))
                                 )}
@@ -841,6 +896,7 @@ function App() {
                                 <div className="w-3 h-10 rounded-full bg-slate-300 shadow-sm shadow-slate-200"></div>
                                 <h4 className="text-xl font-black uppercase tracking-[0.2em] text-slate-500 italic">Arquivos Desorganizados</h4>
                                 <div className="flex-1 h-px bg-slate-200"></div>
+                                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Arraste para organizar ↑</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-2">
                                 {quizzes.filter(q => !q.workplace_id).map(quiz => (
@@ -853,6 +909,8 @@ function App() {
                                         onReset={handleResetQuizBlock}
                                         onDelete={handleDeleteQuizBlock}
                                         onDrop={handleDropOnQuiz}
+                                        isDraggable={true}
+                                        onQuizDrop={handleMergeQuizzes}
                                     />
                                 ))}
                             </div>

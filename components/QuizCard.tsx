@@ -10,6 +10,10 @@ interface QuizCardProps {
     onReset: (id: string, e: React.MouseEvent) => void;
     onDelete: (id: string, e: React.MouseEvent) => void;
     onDrop: (id: string, file: File) => void;
+    /** If true, this card is draggable (for disorganized blocks) */
+    isDraggable?: boolean;
+    /** Called when a quiz block is dropped onto this card (merge) */
+    onQuizDrop?: (targetQuizId: string, sourceQuizId: string) => void;
 }
 
 export const QuizCard: React.FC<QuizCardProps> = ({
@@ -19,36 +23,86 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     onShowStats,
     onReset,
     onDelete,
-    onDrop
+    onDrop,
+    isDraggable = false,
+    onQuizDrop
 }) => {
     const answered = qStats.correct + qStats.incorrect;
     const progressPerc = Math.round((answered / qStats.total) * 100);
     const successPerc = answered > 0 ? Math.round((qStats.correct / answered) * 100) : 0;
 
     const [isCardDragging, setIsCardDragging] = useState(false);
+    const [isBeingDragged, setIsBeingDragged] = useState(false);
+
+    const handleDragStart = (e: React.DragEvent) => {
+        if (!isDraggable) return;
+        e.dataTransfer.setData('application/quiz-id', quiz.id);
+        e.dataTransfer.setData('application/quiz-title', quiz.title);
+        e.dataTransfer.effectAllowed = 'move';
+        setIsBeingDragged(true);
+    };
+
+    const handleDragEnd = () => {
+        setIsBeingDragged(false);
+    };
+
+    const handleDragOver = (e: React.DragEvent) => {
+        // Accept both files and quiz drags
+        if (e.dataTransfer.types.includes('application/quiz-id') || e.dataTransfer.files.length > 0) {
+            e.preventDefault();
+            setIsCardDragging(true);
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsCardDragging(false);
+
+        // Check if it's a quiz being dropped (merge)
+        const sourceQuizId = e.dataTransfer.getData('application/quiz-id');
+        if (sourceQuizId && sourceQuizId !== quiz.id && onQuizDrop) {
+            onQuizDrop(quiz.id, sourceQuizId);
+            return;
+        }
+
+        // Otherwise, it's a file being dropped
+        const file = e.dataTransfer.files[0];
+        if (file) onDrop(quiz.id, file);
+    };
 
     return (
         <div
+            draggable={isDraggable}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
             onClick={() => onShowStats(quiz)}
-            onDragOver={(e) => { e.preventDefault(); setIsCardDragging(true); }}
+            onDragOver={handleDragOver}
             onDragLeave={() => setIsCardDragging(false)}
-            onDrop={(e) => {
-                e.preventDefault();
-                setIsCardDragging(false);
-                const file = e.dataTransfer.files[0];
-                if (file) onDrop(quiz.id, file);
-            }}
-            className={`bg-white p-6 rounded-[2rem] border-2 transition-all duration-300 flex flex-col group cursor-pointer relative overflow-hidden h-full ${isCardDragging ? 'border-indigo-500 bg-indigo-50 scale-[1.02] shadow-2xl ring-4 ring-indigo-500/20' : 'border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-200 hover:-translate-y-1'
-                }`}
+            onDrop={handleDrop}
+            className={`bg-white p-6 rounded-[2rem] border-2 transition-all duration-300 flex flex-col group cursor-pointer relative overflow-hidden h-full ${isBeingDragged ? 'opacity-40 scale-95 ring-4 ring-indigo-300/50 border-indigo-300' :
+                    isCardDragging ? 'border-indigo-500 bg-indigo-50 scale-[1.02] shadow-2xl ring-4 ring-indigo-500/20' :
+                        'border-slate-100 shadow-sm hover:shadow-xl hover:border-indigo-200 hover:-translate-y-1'
+                } ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
         >
             <div className="absolute left-0 top-0 w-2 h-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+
+            {/* Drag handle for disorganized cards */}
+            {isDraggable && (
+                <div className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-slate-300 group-hover:text-indigo-400 transition-colors z-10" title="Arraste para organizar">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
+                        <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
+                        <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
+                    </svg>
+                </div>
+            )}
 
             {isCardDragging && (
                 <div className="absolute inset-0 bg-indigo-600/10 flex flex-col items-center justify-center z-50 pointer-events-none backdrop-blur-[2px]">
                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl animate-bounce">
-                        <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                        <svg className="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 13l-5 5m0 0l-5-5m5 5V6" /></svg>
                     </div>
-                    <span className="text-indigo-800 font-black uppercase text-xs mt-4 tracking-[0.2em] bg-white px-4 py-1.5 rounded-full shadow-sm">Solte o arquivo</span>
+                    <span className="text-indigo-800 font-black uppercase text-xs mt-4 tracking-[0.2em] bg-white px-4 py-1.5 rounded-full shadow-sm">Mesclar aqui</span>
                 </div>
             )}
 

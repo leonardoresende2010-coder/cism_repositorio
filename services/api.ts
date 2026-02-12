@@ -300,6 +300,30 @@ export const api = {
         }
     },
 
+    async moveQuizToWorkplace(quizId: string, workplaceId: string): Promise<void> {
+        const response = await fetch(`${API_URL}/quizzes/${quizId}/move?workplace_id=${encodeURIComponent(workplaceId)}`, {
+            method: 'PATCH',
+            headers: getHeaders(),
+        });
+        if (response.status === 401) throw new Error('Unauthorized');
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.detail || 'Failed to move quiz');
+        }
+    },
+
+    async mergeQuizzes(targetQuizId: string, sourceQuizId: string): Promise<void> {
+        const response = await fetch(`${API_URL}/quizzes/${targetQuizId}/merge/${sourceQuizId}`, {
+            method: 'POST',
+            headers: getHeaders(),
+        });
+        if (response.status === 401) throw new Error('Unauthorized');
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.detail || 'Failed to merge quizzes');
+        }
+    },
+
     // --- Progress ---
     async getProgress(): Promise<UserSession> {
         const response = await fetch(`${API_URL}/progress/`, { headers: getHeaders() });
