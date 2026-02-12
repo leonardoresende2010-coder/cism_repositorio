@@ -628,7 +628,7 @@ from . import gemini_service
 # --- AI Debug Endpoint (public, for diagnostics) ---
 @app.get("/ai/debug")
 def ai_debug():
-    """Public diagnostic endpoint to test OpenRouter API connectivity."""
+    """Public diagnostic endpoint to test DeepSeek API connectivity."""
     import requests as req
     
     results = {
@@ -636,165 +636,63 @@ def ai_debug():
         "step_2_key_format": None,
         "step_3_api_test": None,
         "step_4_response": None,
-        "all_env_vars": {},
         "conclusion": ""
     }
     
-    # Step 1: Check if env var exists
-    api_key = os.getenv("OPENROUTER_API_KEY")
+    api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
-        results["step_1_env_var"] = "FAIL - OPENROUTER_API_KEY not found in environment"
-        # Check if it might be under a different name
-        for key in os.environ:
-            if "OPENROUTER" in key.upper() or "API" in key.upper() or "KEY" in key.upper():
-                results["all_env_vars"][key] = f"{os.environ[key][:8]}..." if len(os.environ[key]) > 8 else "***"
-        results["conclusion"] = "API key not configured. Check Railway variable name."
+        results["step_1_env_var"] = "FAIL - DEEPSEEK_API_KEY not found"
+        # List any relevant env vars for debugging
+        relevant = {k: f"{v[:8]}..." for k, v in os.environ.items() 
+                     if any(x in k.upper() for x in ["DEEP", "API", "KEY", "OPENROUTER", "GEMINI"])}
+        results["found_vars"] = relevant
+        results["conclusion"] = "DEEPSEEK_API_KEY not configured in Railway."
         return results
     
-    results["step_1_env_var"] = f"OK - Key found, length={len(api_key)}, starts with: {api_key[:12]}..."
+    results["step_1_env_var"] = f"OK - length={len(api_key)}, starts with: {api_key[:10]}..."
     
-    # Step 2: Check key format
-    if api_key.startswith("sk-or-"):
-        results["step_2_key_format"] = "OK - Starts with sk-or- (valid OpenRouter format)"
-    elif api_key.startswith("sk-"):
-        results["step_2_key_format"] = "WARNING - Starts with sk- (might be OpenAI, not OpenRouter)"
-    elif api_key.startswith("AIza"):
-        results["step_2_key_format"] = "FAIL - This is a Google/Gemini key, not OpenRouter!"
-        results["conclusion"] = "Wrong API key! You need an OpenRouter key (starts with sk-or-), not a Gemini key."
-        return results
+    if api_key.startswith("sk-"):
+        results["step_2_key_format"] = "OK - Starts with sk- (valid DeepSeek format)"
     else:
-        results["step_2_key_format"] = f"UNKNOWN - Starts with: {api_key[:6]}..."
+        results["step_2_key_format"] = f"WARNING - Starts with: {api_key[:6]}..."
     
-    # Step 3: Make test request
+    # Make test request to DeepSeek
     headers = {
         "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": os.getenv("FRONTEND_URL", "https://prepwise.vercel.app"),
-        "X-Title": "PrepWise CISM Debug"
+        "Content-Type": "application/json"
     }
     
     payload = {
-        "model": "google/gemma-3-27b-it:free",
-        "messages": [
-            {"role": "user", "content": "Say hello in one word."}
-        ],
+        "model": "deepseek-chat",
+        "messages": [{"role": "user", "content": "Say hello in one word."}],
         "max_tokens": 10,
         "temperature": 0
     }
     
     try:
-        resp = req.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=30
-        )
-        
-        results["step_3_api_test"] = {
-            "status_code": resp.status_code,
-            "headers": dict(resp.headers),
-        }
+        resp = req.post("https://api.deepseek.com/chat/completions", headers=headers, json=payload, timeout=30)
+        results["step_3_api_test"] = {"status_code": resp.status_code}
         
         try:
-            body = resp.json()
-            results["step_4_response"] = body
+            results["step_4_response"] = resp.json()
         except:
             results["step_4_response"] = resp.text[:1000]
         
         if resp.status_code == 200:
-            results["conclusion"] = "SUCCESS! OpenRouter API is working correctly."
+            results["conclusion"] = "SUCCESS! DeepSeek API is working correctly."
         elif resp.status_code == 401:
-            results["conclusion"] = "FAIL - API key is invalid or expired. Generate a new key at openrouter.ai"
+            results["conclusion"] = "FAIL - API key is invalid. Check your DeepSeek key."
         elif resp.status_code == 429:
-            results["conclusion"] = "RATE LIMITED - Too many requests. Wait a few minutes and try again."
-        elif resp.status_code == 404:
-            results["conclusion"] = "NOT FOUND - The model or endpoint may not exist. Check the response body for details."
+            results["conclusion"] = "RATE LIMITED - Wait and try again."
+        elif resp.status_code == 402:
+            results["conclusion"] = "INSUFFICIENT BALANCE - Add credits to DeepSeek."
         else:
-            results["conclusion"] = f"UNEXPECTED STATUS {resp.status_code}. Check step_4_response for details."
-            
-    except req.exceptions.Timeout:
-        results["step_3_api_test"] = "TIMEOUT - Request took too long"
-        results["conclusion"] = "TIMEOUT - OpenRouter did not respond in 30 seconds."
-    except req.exceptions.ConnectionError as e:
-        results["step_3_api_test"] = f"CONNECTION ERROR - {str(e)}"
-        results["conclusion"] = "Cannot connect to OpenRouter. Possible network/firewall issue on Railway."
+            results["conclusion"] = f"UNEXPECTED STATUS {resp.status_code}"
     except Exception as e:
         results["step_3_api_test"] = f"ERROR - {str(e)}"
-        results["conclusion"] = f"Unexpected error: {str(e)}"
+        results["conclusion"] = f"Connection error: {str(e)}"
     
     return results
-
-@app.get("/ai/debug-full")
-def ai_debug_full():
-    """Test with a realistic CISM question prompt - reproduces the 400 error."""
-    import requests as req
-    
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        return {"error": "No API key"}
-    
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": os.getenv("FRONTEND_URL", "https://prepwise.vercel.app"),
-        "X-Title": "PrepWise CISM"
-    }
-    
-    # Simulate a real CISM question analysis prompt
-    prompt = """Analyze this CISM exam question. Explain the correct answer and why other options are incorrect.
-
-Question: Which of the following is the MOST important reason for conducting a risk assessment?
-
-Options:
-A) To identify vulnerabilities in systems
-B) To comply with regulatory requirements
-C) To support risk-based decisions on security investments
-D) To document threats to the organization
-
-Correct Answer: C
-
-Existing Explanation: None provided
-
-Provide a concise analysis focusing on the ISACA mindset."""
-
-    payload = {
-        "model": "google/gemma-3-27b-it:free",
-        "messages": [
-            {"role": "system", "content": "You are an expert CISM exam tutor. Provide concise, clear analysis in Portuguese (Brazil)."},
-            {"role": "user", "content": prompt}
-        ],
-        "max_tokens": 2048,
-        "temperature": 0.7
-    }
-    
-    try:
-        resp = req.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=90
-        )
-        
-        result = {
-            "status_code": resp.status_code,
-            "response_body": None,
-            "payload_sent": {
-                "model": payload["model"],
-                "messages_count": len(payload["messages"]),
-                "system_msg_length": len(payload["messages"][0]["content"]),
-                "user_msg_length": len(payload["messages"][1]["content"]),
-                "max_tokens": payload["max_tokens"],
-            }
-        }
-        
-        try:
-            result["response_body"] = resp.json()
-        except:
-            result["response_body"] = resp.text[:2000]
-        
-        return result
-    except Exception as e:
-        return {"error": str(e)}
 
 @app.post("/ai/analyze", response_model=str)
 def ai_analyze_question(question: schemas.Question, current_user: models.User = Depends(get_current_user)):
