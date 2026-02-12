@@ -628,7 +628,7 @@ from . import gemini_service
 # --- AI Debug Endpoint (public, for diagnostics) ---
 @app.get("/ai/debug")
 def ai_debug():
-    """Public diagnostic endpoint to test DeepSeek API connectivity."""
+    """Public diagnostic endpoint to test Groq API connectivity."""
     import requests as req
     
     results = {
@@ -639,38 +639,36 @@ def ai_debug():
         "conclusion": ""
     }
     
-    api_key = os.getenv("DEEPSEEK_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        results["step_1_env_var"] = "FAIL - DEEPSEEK_API_KEY not found"
-        # List any relevant env vars for debugging
+        results["step_1_env_var"] = "FAIL - GROQ_API_KEY not found"
         relevant = {k: f"{v[:8]}..." for k, v in os.environ.items() 
-                     if any(x in k.upper() for x in ["DEEP", "API", "KEY", "OPENROUTER", "GEMINI"])}
+                     if any(x in k.upper() for x in ["GROQ", "API", "KEY"])}
         results["found_vars"] = relevant
-        results["conclusion"] = "DEEPSEEK_API_KEY not configured in Railway."
+        results["conclusion"] = "GROQ_API_KEY not configured in Railway."
         return results
     
     results["step_1_env_var"] = f"OK - length={len(api_key)}, starts with: {api_key[:10]}..."
     
-    if api_key.startswith("sk-"):
-        results["step_2_key_format"] = "OK - Starts with sk- (valid DeepSeek format)"
+    if api_key.startswith("gsk_"):
+        results["step_2_key_format"] = "OK - Starts with gsk_ (valid Groq format)"
     else:
-        results["step_2_key_format"] = f"WARNING - Starts with: {api_key[:6]}..."
+        results["step_2_key_format"] = f"WARNING - Expected gsk_ prefix, got: {api_key[:6]}..."
     
-    # Make test request to DeepSeek
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
     
     payload = {
-        "model": "deepseek-chat",
+        "model": "llama-3.3-70b-versatile",
         "messages": [{"role": "user", "content": "Say hello in one word."}],
         "max_tokens": 10,
         "temperature": 0
     }
     
     try:
-        resp = req.post("https://api.deepseek.com/chat/completions", headers=headers, json=payload, timeout=30)
+        resp = req.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=30)
         results["step_3_api_test"] = {"status_code": resp.status_code}
         
         try:
@@ -679,13 +677,11 @@ def ai_debug():
             results["step_4_response"] = resp.text[:1000]
         
         if resp.status_code == 200:
-            results["conclusion"] = "SUCCESS! DeepSeek API is working correctly."
+            results["conclusion"] = "SUCCESS! Groq API is working correctly."
         elif resp.status_code == 401:
-            results["conclusion"] = "FAIL - API key is invalid. Check your DeepSeek key."
+            results["conclusion"] = "FAIL - API key is invalid. Check your Groq key."
         elif resp.status_code == 429:
             results["conclusion"] = "RATE LIMITED - Wait and try again."
-        elif resp.status_code == 402:
-            results["conclusion"] = "INSUFFICIENT BALANCE - Add credits to DeepSeek."
         else:
             results["conclusion"] = f"UNEXPECTED STATUS {resp.status_code}"
     except Exception as e:

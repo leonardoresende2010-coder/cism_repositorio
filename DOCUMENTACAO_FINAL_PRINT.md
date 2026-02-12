@@ -34,7 +34,7 @@ O código local foi sincronizado com o GitHub após resolver conflitos de histó
 1. Importe o repositório do GitHub.
 2. Adicione as Variáveis de Ambiente essenciais:
    - `DATABASE_URL`: Conexão Neon.
-   - `DEEPSEEK_API_KEY`: Para inteligência artificial (DeepSeek API).
+   - `GROQ_API_KEY`: Para inteligência artificial (Groq API, plano gratuito).
    - `CORS_ORIGINS`: URL do Vercel (ex: `https://site.vercel.app`).
    - `FRONTEND_URL`: Mesma URL do Vercel.
    - `USE_SQLITE`: `false` (obrigatório para usar Neon).
@@ -79,7 +79,7 @@ Durante a migração, resolvemos os seguintes pontos críticos. Esta seção ser
 
 **Railway:**
 - `DATABASE_URL`: (string de conexão do Neon - configurar no painel do Railway)
-- `DEEPSEEK_API_KEY`: (chave da API DeepSeek - configurar no painel do Railway)
+- `GROQ_API_KEY`: (chave da API Groq - configurar no painel do Railway)
 - `CORS_ORIGINS`: URL_DO_VERCEL (ou `*` para testes)
 - `USE_SQLITE`: `false`
 
