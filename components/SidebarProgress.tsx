@@ -69,9 +69,9 @@ export const SidebarProgress: React.FC<SidebarProgressProps> = ({
   }, [session, clearedRows, collapsingRows, rows, isInitialized]);
 
   const startExplosionSequence = async (rowIndex: number, row: Question[]) => {
-    // Play sound from the beginning
+    // Play sound! (Advanced 0.5s to skip intro silence)
     if (soundRef.current) {
-      soundRef.current.currentTime = 0;
+      soundRef.current.currentTime = 0.5;
       soundRef.current.play().catch(e => console.log("Sound play failed:", e));
     }
 
