@@ -625,6 +625,105 @@ def create_community_note(note: schemas.CommunityNoteCreate, db: Session = Depen
 
 from . import gemini_service
 
+# --- AI Debug Endpoint (public, for diagnostics) ---
+@app.get("/ai/debug")
+def ai_debug():
+    """Public diagnostic endpoint to test OpenRouter API connectivity."""
+    import requests as req
+    
+    results = {
+        "step_1_env_var": None,
+        "step_2_key_format": None,
+        "step_3_api_test": None,
+        "step_4_response": None,
+        "all_env_vars": {},
+        "conclusion": ""
+    }
+    
+    # Step 1: Check if env var exists
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        results["step_1_env_var"] = "FAIL - OPENROUTER_API_KEY not found in environment"
+        # Check if it might be under a different name
+        for key in os.environ:
+            if "OPENROUTER" in key.upper() or "API" in key.upper() or "KEY" in key.upper():
+                results["all_env_vars"][key] = f"{os.environ[key][:8]}..." if len(os.environ[key]) > 8 else "***"
+        results["conclusion"] = "API key not configured. Check Railway variable name."
+        return results
+    
+    results["step_1_env_var"] = f"OK - Key found, length={len(api_key)}, starts with: {api_key[:12]}..."
+    
+    # Step 2: Check key format
+    if api_key.startswith("sk-or-"):
+        results["step_2_key_format"] = "OK - Starts with sk-or- (valid OpenRouter format)"
+    elif api_key.startswith("sk-"):
+        results["step_2_key_format"] = "WARNING - Starts with sk- (might be OpenAI, not OpenRouter)"
+    elif api_key.startswith("AIza"):
+        results["step_2_key_format"] = "FAIL - This is a Google/Gemini key, not OpenRouter!"
+        results["conclusion"] = "Wrong API key! You need an OpenRouter key (starts with sk-or-), not a Gemini key."
+        return results
+    else:
+        results["step_2_key_format"] = f"UNKNOWN - Starts with: {api_key[:6]}..."
+    
+    # Step 3: Make test request
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": os.getenv("FRONTEND_URL", "https://prepwise.vercel.app"),
+        "X-Title": "PrepWise CISM Debug"
+    }
+    
+    payload = {
+        "model": "meta-llama/llama-4-maverick:free",
+        "messages": [
+            {"role": "user", "content": "Say hello in one word."}
+        ],
+        "max_tokens": 10,
+        "temperature": 0
+    }
+    
+    try:
+        resp = req.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=30
+        )
+        
+        results["step_3_api_test"] = {
+            "status_code": resp.status_code,
+            "headers": dict(resp.headers),
+        }
+        
+        try:
+            body = resp.json()
+            results["step_4_response"] = body
+        except:
+            results["step_4_response"] = resp.text[:1000]
+        
+        if resp.status_code == 200:
+            results["conclusion"] = "SUCCESS! OpenRouter API is working correctly."
+        elif resp.status_code == 401:
+            results["conclusion"] = "FAIL - API key is invalid or expired. Generate a new key at openrouter.ai"
+        elif resp.status_code == 429:
+            results["conclusion"] = "RATE LIMITED - Too many requests. Wait a few minutes and try again."
+        elif resp.status_code == 404:
+            results["conclusion"] = "NOT FOUND - The model or endpoint may not exist. Check the response body for details."
+        else:
+            results["conclusion"] = f"UNEXPECTED STATUS {resp.status_code}. Check step_4_response for details."
+            
+    except req.exceptions.Timeout:
+        results["step_3_api_test"] = "TIMEOUT - Request took too long"
+        results["conclusion"] = "TIMEOUT - OpenRouter did not respond in 30 seconds."
+    except req.exceptions.ConnectionError as e:
+        results["step_3_api_test"] = f"CONNECTION ERROR - {str(e)}"
+        results["conclusion"] = "Cannot connect to OpenRouter. Possible network/firewall issue on Railway."
+    except Exception as e:
+        results["step_3_api_test"] = f"ERROR - {str(e)}"
+        results["conclusion"] = f"Unexpected error: {str(e)}"
+    
+    return results
+
 @app.post("/ai/analyze", response_model=str)
 def ai_analyze_question(question: schemas.Question, current_user: models.User = Depends(get_current_user)):
     if not current_user.is_premium:
