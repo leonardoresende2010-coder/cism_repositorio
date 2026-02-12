@@ -724,6 +724,78 @@ def ai_debug():
     
     return results
 
+@app.get("/ai/debug-full")
+def ai_debug_full():
+    """Test with a realistic CISM question prompt - reproduces the 400 error."""
+    import requests as req
+    
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        return {"error": "No API key"}
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": os.getenv("FRONTEND_URL", "https://prepwise.vercel.app"),
+        "X-Title": "PrepWise CISM"
+    }
+    
+    # Simulate a real CISM question analysis prompt
+    prompt = """Analyze this CISM exam question. Explain the correct answer and why other options are incorrect.
+
+Question: Which of the following is the MOST important reason for conducting a risk assessment?
+
+Options:
+A) To identify vulnerabilities in systems
+B) To comply with regulatory requirements
+C) To support risk-based decisions on security investments
+D) To document threats to the organization
+
+Correct Answer: C
+
+Existing Explanation: None provided
+
+Provide a concise analysis focusing on the ISACA mindset."""
+
+    payload = {
+        "model": "google/gemma-3-27b-it:free",
+        "messages": [
+            {"role": "system", "content": "You are an expert CISM exam tutor. Provide concise, clear analysis in Portuguese (Brazil)."},
+            {"role": "user", "content": prompt}
+        ],
+        "max_tokens": 2048,
+        "temperature": 0.7
+    }
+    
+    try:
+        resp = req.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=90
+        )
+        
+        result = {
+            "status_code": resp.status_code,
+            "response_body": None,
+            "payload_sent": {
+                "model": payload["model"],
+                "messages_count": len(payload["messages"]),
+                "system_msg_length": len(payload["messages"][0]["content"]),
+                "user_msg_length": len(payload["messages"][1]["content"]),
+                "max_tokens": payload["max_tokens"],
+            }
+        }
+        
+        try:
+            result["response_body"] = resp.json()
+        except:
+            result["response_body"] = resp.text[:2000]
+        
+        return result
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.post("/ai/analyze", response_model=str)
 def ai_analyze_question(question: schemas.Question, current_user: models.User = Depends(get_current_user)):
     if not current_user.is_premium:
