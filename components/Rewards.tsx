@@ -74,19 +74,56 @@ export const Rewards: React.FC<RewardsProps> = ({ quizzes, session }) => {
     const groupedStats = calculateStats();
     const providers = Object.keys(groupedStats).sort();
 
+    // Group fully complete quizzes for the "Hall of Fame"
+    const masterQuizzes: QuizStats[] = [];
+    providers.forEach(p => {
+        groupedStats[p].forEach(q => {
+            if (q.isFullyComplete) masterQuizzes.push(q);
+        });
+    });
+
     return (
         <div className="space-y-16 animate-slide-up pb-20">
             {/* Header */}
             <div className="bg-slate-900 rounded-3xl p-10 text-white shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                 <div className="relative z-10 text-center md:text-left">
-                    <h2 className="text-4xl font-black mb-3">Conquistas por Simulado</h2>
+                    <h2 className="text-4xl font-black mb-3">Conquistas & Troféus</h2>
                     <p className="text-slate-400 text-lg max-w-2xl">
-                        Acompanhe seu progresso individual em cada questionário.
-                        Complete as linhas do gabarito para ganhar troféus e domine 100% das questões para o Troféu Mestre.
+                        Acompanhe seu progresso real. Complete linhas para ganhar medalhas e domine o exame para o Troféu Mestre.
                     </p>
                 </div>
             </div>
+
+            {/* Hall of Masters (Huge Trophies) */}
+            {masterQuizzes.length > 0 && (
+                <div className="space-y-8">
+                    <div className="flex items-center gap-4 px-2">
+                        <div className="h-8 w-2 bg-amber-500 rounded-full"></div>
+                        <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight">🏆 Salão dos Mestres (100%)</h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {masterQuizzes.map(quiz => (
+                            <div key={`master-${quiz.id}`} className="bg-white rounded-[3rem] p-10 shadow-2xl border-4 border-amber-100 flex flex-col items-center text-center relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-gradient-to-b from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="relative">
+                                    <span className="text-[7rem] drop-shadow-2xl animate-pulse inline-block">🏆</span>
+                                    <div className="absolute inset-0 bg-amber-400/20 blur-3xl rounded-full -z-10"></div>
+                                </div>
+                                <h4 className="mt-6 text-2xl font-black text-amber-600 uppercase tracking-tighter leading-tight">
+                                    Mestre de {quiz.title}
+                                </h4>
+                                <div className="mt-3 inline-block px-4 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-amber-200">
+                                    100% DE APROVEITAMENTO
+                                </div>
+                                <p className="mt-4 text-xs font-bold text-slate-400 max-w-[200px]">
+                                    Parabéns! Você dominou todas as {quiz.total} questões com perfeição.
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {providers.length > 0 ? (
                 <div className="space-y-20">
@@ -102,11 +139,11 @@ export const Rewards: React.FC<RewardsProps> = ({ quizzes, session }) => {
                                     const progress = quiz.total > 0 ? (quiz.correct / quiz.total) * 100 : 0;
 
                                     return (
-                                        <div key={quiz.id} className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-gray-100 flex flex-col hover:shadow-2xl hover:border-indigo-100 transition-all group relative overflow-hidden">
+                                        <div key={quiz.id} className={`bg-white rounded-[2.5rem] p-8 shadow-xl border border-gray-100 flex flex-col hover:shadow-2xl hover:border-indigo-100 transition-all group relative overflow-hidden ${quiz.isFullyComplete ? 'ring-4 ring-amber-400/20 border-amber-200' : ''}`}>
 
-                                            {/* Huge Trophy Background Glow */}
+                                            {/* Glow Background for 100% */}
                                             {quiz.isFullyComplete && (
-                                                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                                                <div className="absolute inset-0 bg-amber-50/10 pointer-events-none"></div>
                                             )}
 
                                             <div className="flex justify-between items-start mb-6">
@@ -155,12 +192,11 @@ export const Rewards: React.FC<RewardsProps> = ({ quizzes, session }) => {
                                                 )}
                                             </div>
 
-                                            {/* Huge Award Overlay for 100% */}
+                                            {/* Badge for 100% */}
                                             {quiz.isFullyComplete && (
                                                 <div className="mt-6 pt-6 border-t border-amber-50">
-                                                    <div className="bg-gradient-to-br from-amber-400 to-orange-500 p-4 rounded-2xl text-center shadow-lg shadow-amber-100">
-                                                        <div className="text-white text-xs font-black uppercase tracking-widest">Simulado Concluído</div>
-                                                        <div className="text-amber-50 text-[10px] font-bold uppercase opacity-90">100% MESTRE</div>
+                                                    <div className="bg-gradient-to-br from-amber-400 to-orange-500 p-3 rounded-2xl text-center shadow-lg shadow-amber-100">
+                                                        <div className="text-white text-[10px] font-black uppercase tracking-widest leading-none">Simulado Concluído com 100%</div>
                                                     </div>
                                                 </div>
                                             )}
