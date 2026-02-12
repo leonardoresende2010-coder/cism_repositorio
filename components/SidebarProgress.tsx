@@ -21,7 +21,7 @@ export const SidebarProgress: React.FC<SidebarProgressProps> = ({
   const [showRowTrophy, setShowRowTrophy] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const soundRef = React.useRef<HTMLVideoElement>(null);
+  const soundRef = React.useRef<HTMLAudioElement>(null);
 
   // Calculate rows
   const reversedQuestions = React.useMemo(() => [...questions].reverse(), [questions]);
@@ -100,7 +100,7 @@ export const SidebarProgress: React.FC<SidebarProgressProps> = ({
   return (
     <div className="w-80 bg-white border-l border-gray-200 h-full flex flex-col shrink-0">
       {/* Hidden sound player */}
-      <video ref={soundRef} src="/trombeta.avi" className="hidden" />
+      <audio ref={soundRef} src="/trombeta.mp3" className="hidden" />
 
       <div className="p-4 border-b border-gray-100">
         <div className="flex justify-between items-start">
