@@ -892,11 +892,18 @@ function App() {
                     {/* Uncategorized Blocks Section */}
                     {quizzes.filter(q => !q.workplace_id).length > 0 && (
                         <div className="mt-10">
-                            <div className="flex items-center space-x-4 mb-8 px-6">
+                            <div className="flex items-center space-x-4 mb-4 px-6">
                                 <div className="w-3 h-10 rounded-full bg-slate-300 shadow-sm shadow-slate-200"></div>
                                 <h4 className="text-xl font-black uppercase tracking-[0.2em] text-slate-500 italic">Arquivos Desorganizados</h4>
                                 <div className="flex-1 h-px bg-slate-200"></div>
-                                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Arraste para organizar ↑</span>
+                            </div>
+                            <div className="mb-8 mx-6 px-5 py-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center gap-4">
+                                <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0">
+                                    <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" /></svg>
+                                </div>
+                                <p className="text-sm text-indigo-700 font-medium">
+                                    <strong>Dica:</strong> Arraste qualquer bloco abaixo para dentro de um <strong>Workplace</strong> acima para organizá-lo, ou solte sobre um bloco existente para <strong>mesclar</strong> as questões.
+                                </p>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-2">
                                 {quizzes.filter(q => !q.workplace_id).map(quiz => (
