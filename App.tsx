@@ -451,7 +451,7 @@ function App() {
             });
 
             if (allCorrect && !wasMasteredOnStart) {
-                setShowTrophy(true);
+                // setShowTrophy(true); // Removido para evitar overlay preto antigo
                 setWasMasteredOnStart(true); // Treat as mastered now so it doesn't repeat in same session
             }
         }

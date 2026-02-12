@@ -111,13 +111,13 @@ export const Rewards: React.FC<RewardsProps> = ({ quizzes, session }) => {
                                     <div className="absolute inset-0 bg-amber-400/20 blur-3xl rounded-full -z-10"></div>
                                 </div>
                                 <h4 className="mt-6 text-2xl font-black text-amber-600 uppercase tracking-tighter leading-tight">
-                                    Mestre de {quiz.title}
+                                    MESTRE DO PREPWISE
                                 </h4>
                                 <div className="mt-3 inline-block px-4 py-1 bg-amber-500 text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-lg shadow-amber-200">
-                                    100% DE APROVEITAMENTO
+                                    Você desbloqueou um nível
                                 </div>
                                 <p className="mt-4 text-xs font-bold text-slate-400 max-w-[200px]">
-                                    Parabéns! Você dominou todas as {quiz.total} questões com perfeição.
+                                    Parabéns! Você dominou todas as {quiz.total} questões do simulado "{quiz.title}" com perfeição.
                                 </p>
                             </div>
                         ))}
