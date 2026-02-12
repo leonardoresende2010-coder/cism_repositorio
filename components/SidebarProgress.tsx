@@ -75,9 +75,6 @@ export const SidebarProgress: React.FC<SidebarProgressProps> = ({
       soundRef.current.play().catch(e => console.log("Sound play failed:", e));
     }
 
-    // Wait 1.5 seconds for the sound's impact point before starting explosions
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
     // Explode one by one
     for (let i = 0; i < row.length; i++) {
       setExplodingIds(prev => [...prev, row[i].id]);
